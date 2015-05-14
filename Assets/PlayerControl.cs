@@ -93,5 +93,15 @@ public class PlayerControl : NetworkBehaviour {
 		Vector3 moveDir = new Vector3(x, jump * 10, y);
 		return moveDir;
 	}
+/*
+	public override void OnStartServer()
+	{
+		// disable client stuff
+	}
+*/	
+	public override void OnStartClient()
+	{
+		Debug.Log (" register client events, enable effects :" + isLocalPlayer +" : "+ isServer +" :" + isClient);
+	}
 	
 }
