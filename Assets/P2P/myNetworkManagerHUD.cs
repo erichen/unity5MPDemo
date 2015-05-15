@@ -125,8 +125,12 @@ public class myNetworkManagerHUD : MonoBehaviour {
 			
 		if(GUILayout.Button("Disconnect", GUILayout.Height(buttonHeight), GUILayout.Width(buttonWidth)))
 			Disconnect();
-
-		GUILayout.Label("IP Address:" + connectToIp + ":" + connectPort, GUILayout.Width(buttonWidth*2));
+		if (myClient != null) {
+			GUILayout.Label ("Peers:" + myClient.serverIp);
+//			GUILayout.Label ("Host:"+ myClient.peers[0].isHost + "IP Address:" + myClient.peers[0].address + ":" + myClient.peers[0].port + " RTT:"+ myClient.GetRTT(), GUILayout.Width (buttonWidth * 2));
+		} else {
+			GUILayout.Label ("IP Address:" + connectToIp + ":" + connectPort, GUILayout.Width (buttonWidth * 2));
+		}
 
 	}
 
@@ -190,6 +194,9 @@ public class myNetworkManagerHUD : MonoBehaviour {
 	{
 		Debug.Log("Connected to server:"+ myClient.GetType()+" RTT:"+ myClient.GetRTT() + " hostid:" + netMsg.conn.hostId);
 		isConnecting = false;
+		Debug.Log ("myClient.serverIp " + myClient.serverIp + " myClient.serverPort " + myClient.serverPort);
+		//connectToIp = myClient.serverIp;
+		//connectPort = myClient.serverPort;
 	}
 	public void OnClientError(NetworkMessage netMsg){
 		Debug.Log("Error to Connected to server:");
@@ -197,6 +204,7 @@ public class myNetworkManagerHUD : MonoBehaviour {
 		isAtStartup = true;
 		ClientScene.DestroyAllClientObjects();
 	}
+
 	public void OnReady(NetworkMessage netMsg){
 		Debug.Log("OnReady"+ myClient.GetType()+" RTT:"+ myClient.GetRTT() + " hostid:" + netMsg.conn.hostId);
 	}
