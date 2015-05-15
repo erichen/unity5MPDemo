@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class PlayerControl : NetworkBehaviour {
-	public float speed = 5;
+	public float speed = 10;
 	public GameObject particle;
 
 	[Command]
