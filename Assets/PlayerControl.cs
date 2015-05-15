@@ -7,17 +7,24 @@ public class PlayerControl : NetworkBehaviour {
 	public GameObject particle;
 
 	[Command]
-	void CmdMoveTo(Vector3 moveDir){
+	void CmdMoveTo(Vector3 pos, Vector3 moveDir){
+		transform.position = pos;
 		transform.Translate(speed * moveDir * Time.deltaTime );
 		RpcSyncPos (transform.position);
 		RpcMoveTo (moveDir);
 	}
 	[ClientRpc]
 	void RpcSyncPos(Vector3 pos){
+		if (isLocalPlayer) {
+			return;
+		}
 		transform.position = pos;
 	}
 	[ClientRpc]
 	void RpcMoveTo(Vector3 moveDir){
+		if (isLocalPlayer) {
+			return;
+		}
 		transform.Translate(speed * moveDir * Time.deltaTime );
 	}
 
@@ -49,7 +56,7 @@ public class PlayerControl : NetworkBehaviour {
 			return;
 		}
 		transform.Translate(speed * moveDir * Time.deltaTime );
-		CmdMoveTo (moveDir);
+		CmdMoveTo (transform.position, moveDir);
 	}
 	void checkMouse(){
 		if (Input.GetMouseButtonDown (0)) {//left button
@@ -68,7 +75,7 @@ public class PlayerControl : NetworkBehaviour {
 	void MoveTo(float x, float y){
 		Vector3 moveDir = GetMoveDir(x, y);
 		transform.Translate(speed * moveDir * Time.deltaTime );
-		CmdMoveTo (moveDir);
+		CmdMoveTo (transform.position, moveDir);
 	}
 	Vector3 GetMoveDir(float px, float py){
 		float x = -1;
